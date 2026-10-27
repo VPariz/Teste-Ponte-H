@@ -1,0 +1,2 @@
+# Mark STMicroelectronics HAL and CMSIS as vendored code
+Drivers/** linguist-vendored
