@@ -7,7 +7,7 @@
 [![Team](https://img.shields.io/badge/Organization-RoboIME-104911?style=flat-square)](https://roboime.com.br/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-Embedded C firmware developed for **RoboIME** to control and validate dual DC motor actuation through H-bridge power stages (L298N / discrete MOSFET bridges) using the **STM32F103C8T6 (ARM Cortex-M3 / BluePill)**.
+Embedded C firmware designed and implemented by **João Victor Pariz** for the **RoboIME** autonomous robotics team to validate and control dual DC motor actuation through H-bridge power stages (L298N / discrete MOSFET bridges) using the **STM32F103C8T6 (ARM Cortex-M3 / BluePill)**.
 
 ---
 
@@ -113,3 +113,15 @@ The main application loop in [`main.c`](file:///Core/Src/main.c) executes a peri
 3. **Braking & Hold:** Deasserts drivers and turns OFF status LED for 1000 ms.
 4. **Reverse Rotation:** Activates `PA2` / `PA1` for 2000 ms.
 5. **Full Stop:** Safely deasserts all control lines for 1000 ms before repeating.
+
+---
+
+## 👤 Author & Context
+
+* **João Victor Pariz** ([@VPariz](https://github.com/VPariz)) — Electronics Engineering undergraduate, Instituto Militar de Engenharia (IME).
+* Developed within the context of the **RoboIME** Autonomous Systems team to validate hardware driver stages for mobile robotics.
+
+---
+
+## 📜 License
+This project is licensed under the [MIT License](LICENSE).
