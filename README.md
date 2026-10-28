@@ -1,11 +1,47 @@
 # Dual DC Motor H-Bridge Firmware (STM32 BluePill)
 
+[![Firmware CI](https://github.com/VPariz/Teste-Ponte-H/actions/workflows/ci.yml/badge.svg)](https://github.com/VPariz/Teste-Ponte-H/actions/workflows/ci.yml)
 [![Language](https://img.shields.io/badge/Language-C-00599C?style=flat-square&logo=c&logoColor=white)](https://en.wikipedia.org/wiki/C_(programming_language))
 [![Microcontroller](https://img.shields.io/badge/MCU-STM32F103C8T6-03234B?style=flat-square&logo=stmicroelectronics&logoColor=white)](https://www.st.com/en/microcontrollers-microprocessors/stm32f103c8.html)
 [![Framework](https://img.shields.io/badge/Framework-STM32Cube_HAL-blue?style=flat-square)](https://www.st.com/)
 [![Team](https://img.shields.io/badge/Organization-RoboIME-104911?style=flat-square)](https://roboime.com.br/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
 Embedded C firmware developed for **RoboIME** to control and validate dual DC motor actuation through H-bridge power stages (L298N / discrete MOSFET bridges) using the **STM32F103C8T6 (ARM Cortex-M3 / BluePill)**.
+
+---
+
+## 🎯 System Architecture & Signal Flow
+
+```mermaid
+flowchart LR
+    subgraph STM32F103C8T6 ["STM32F103C8T6 (BluePill 3.3V Logic)"]
+        PA0["PA0 (M0_MAH)"]
+        PA3["PA3 (M0_MBL)"]
+        PA2["PA2 (M0_MBH)"]
+        PA1["PA1 (M0_MAL)"]
+        PC13["PC13 (Status LED)"]
+    end
+
+    subgraph HBridge ["H-Bridge Power Stage"]
+        IN1["IN1 (M0_MBL)"]
+        IN2["IN2 (M0_MBH)"]
+        IN3["IN3 (M0_MAL)"]
+        IN4["IN4 (M0_MAH)"]
+    end
+
+    subgraph Actuators ["RoboIME DC Motors"]
+        MA[("DC Motor A")]
+        MB[("DC Motor B")]
+    end
+
+    PA0 -->|Active Low| IN4
+    PA3 -->|Active High| IN1
+    PA2 -->|Active Low| IN2
+    PA1 -->|Active High| IN3
+    IN4 & IN1 --> MA
+    IN2 & IN3 --> MB
+```
 
 ---
 

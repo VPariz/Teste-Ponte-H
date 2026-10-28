@@ -1,0 +1,57 @@
+name: STM32 Firmware CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    name: Embedded C Compilation Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install ARM GNU Embedded Toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-arm-none-eabi libnewlib-arm-none-eabi
+
+      - name: Verify Toolchain Version
+        run: |
+          arm-none-eabi-gcc --version
+
+      - name: Compile Application Sources
+        run: |
+          arm-none-eabi-gcc -c -mcpu=cortex-m3 -mthumb \
+            -DSTM32F103xB -DUSE_HAL_DRIVER \
+            -ICore/Inc \
+            -IDrivers/STM32F1xx_HAL_Driver/Inc \
+            -IDrivers/STM32F1xx_HAL_Driver/Inc/Legacy \
+            -IDrivers/CMSIS/Device/ST/STM32F1xx/Include \
+            -IDrivers/CMSIS/Include \
+            -Wall -Wextra -Werror \
+            Core/Src/main.c \
+            Core/Src/stm32f1xx_hal_msp.c \
+            Core/Src/stm32f1xx_it.c \
+            Core/Src/system_stm32f1xx.c
+
+      - name: Compile STM32 HAL Drivers
+        run: |
+          arm-none-eabi-gcc -c -mcpu=cortex-m3 -mthumb \
+            -DSTM32F103xB -DUSE_HAL_DRIVER \
+            -ICore/Inc \
+            -IDrivers/STM32F1xx_HAL_Driver/Inc \
+            -IDrivers/STM32F1xx_HAL_Driver/Inc/Legacy \
+            -IDrivers/CMSIS/Device/ST/STM32F1xx/Include \
+            -IDrivers/CMSIS/Include \
+            -Wall -Wextra \
+            Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c \
+            Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c \
+            Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c \
+            Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.c \
+            Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c \
+            Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c
